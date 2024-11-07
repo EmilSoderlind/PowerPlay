@@ -1,11 +1,12 @@
 import { MqttEvent } from "../types";
 import jsonpack from "jsonpack";
+import { isValidMqttEvent } from "./utils";
 
 const decompress = (rawEvent: string): MqttEvent => {
   try {
-    const unpacked = jsonpack.unpack(rawEvent) as MqttEvent;
+    const unpacked = jsonpack.unpack(rawEvent);
 
-    if (!validateEvent(unpacked)) {
+    if (!isValidMqttEvent(unpacked)) {
       throw new Error("Invalid event object");
     }
 
@@ -14,11 +15,6 @@ const decompress = (rawEvent: string): MqttEvent => {
     console.log("Could not decompress event", error, JSON.stringify(rawEvent));
     throw error;
   }
-};
-
-const validateEvent = (event: MqttEvent): boolean => {
-  // Here we really should validate the event object
-  return true;
 };
 
 export default {
