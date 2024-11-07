@@ -54,7 +54,6 @@ export class DashboardComponent {
 
   async fetchEvents() {
     const events = await firstValueFrom(this.eventService.getAllEvents());
-    console.log('🔋 ~ fetchEvents ~ events:', events);
     this.eventsSubject.next(events);
   }
 
