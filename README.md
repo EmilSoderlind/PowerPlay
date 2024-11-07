@@ -9,7 +9,8 @@ PowerPlay is a Docker-based microservices architecture designed to generate, cap
 - **pusher**: Generates events and publishes these to a MQTT topic
 - **archiver**: Subscribes to the MQTT topic, retrieves data, and stores it in the MongoDB database.
 - **mongodb**: Stores the archived events
-- **api**: Exposes an API for interacting with the archived data
+- **api**: Exposes an API for retreiving with the archived data
+- **event-management**: Webapp that gives you insights from event-data
 
 ## Getting Started
 
