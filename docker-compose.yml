@@ -1,0 +1,40 @@
+version: '1'
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: PowerPlay
+
+  pusher:
+    build: ./pusher
+    environment:
+      MQTT_TOPIC: POWERPLAY_TOPIC
+
+  archiver:
+    build: ./archiver
+    depends_on:
+      - mongodb
+    environment:
+      MONGO_URI: mongodb://root:example@mongodb:27017/PowerPlay?authSource=admin
+      MQTT_TOPIC: POWERPLAY_TOPIC
+
+  api:
+    build: ./api
+    depends_on:
+      - mongodb
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      MONGO_URI: mongodb://root:example@mongodb:27017/PowerPlay?authSource=admin
+  # event-management:
+  #   build: ./event-management
+  #   ports:
+  #     - "4200:4200"
+  #   depends_on:
+  #     - api

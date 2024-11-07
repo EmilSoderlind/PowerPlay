@@ -1,0 +1,70 @@
+<div class="grid-container">
+  <h1 class="mat-h1">Event Management</h1>
+  <mat-grid-list cols="3" rowHeight="400px">
+    @for (card of cards | async; track card) {
+    <mat-grid-tile [colspan]="card.cols" [rowspan]="card.rows">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            {{ card.title }}
+            <hr />
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          <ng-container *ngIf="card.title === 'Total'">
+            <h2>
+              <b>{{ card.value }}</b>
+            </h2>
+          </ng-container>
+
+          <ng-container *ngIf="card.title === 'Types'">
+            <h5>
+              ACTIVE: <b>{{ card.values?.['ACTIVE'] ?? 0 }}</b>
+            </h5>
+            <h5>
+              RECLINE: <b>{{ card.values?.['RECLINE'] ?? 0 }}</b>
+            </h5>
+            <h5>
+              CHARGING: <b>{{ card.values?.['CHARGING'] ?? 0 }}</b>
+            </h5>
+            <h5>
+              INACTIVE: <b>{{ card.values?.['INACTIVE'] ?? 0 }}</b>
+            </h5>
+            <h5>
+              ERROR: <b>{{ card.values?.['ERROR'] ?? 0 }}</b>
+            </h5>
+          </ng-container>
+
+          <ng-container *ngIf="card.title === 'Latest event'">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Chair-ID</th>
+                  <th>Type</th>
+                  <th>Timestamp</th>
+                  <th>Version</th>
+                  <th>Log</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let event of card.latestEvents"
+                  [class.demo-row]="event.type === 'DEMO'"
+                >
+                  <td>{{ event.id }}</td>
+                  <td>{{ event.chairId }}</td>
+                  <td>{{ event.type }}</td>
+                  <td>{{ event.timestamp }}</td>
+                  <td>{{ event.version }}</td>
+                  <td>{{ event.log }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </ng-container>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+    }
+  </mat-grid-list>
+</div>
