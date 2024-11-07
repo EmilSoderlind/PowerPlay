@@ -3,10 +3,10 @@ import eventCompresser from "./decompresser";
 import { MqttEvent } from "../types";
 
 const MQTT_URL = "mqtt://test.mosquitto.org:1883";
+let retryCount = 0;
+let mqttClient = mqtt.connect(MQTT_URL);
 
 const init = (topic: string, onMessage: (event: MqttEvent) => void) => {
-  let mqttClient = mqtt.connect(MQTT_URL);
-  let retryCount = 0;
   const maxRetries = 5;
 
   mqttClient.on("connect", () => {
@@ -22,19 +22,19 @@ const init = (topic: string, onMessage: (event: MqttEvent) => void) => {
 
   mqttClient.on("error", (error) => {
     console.error("Connection error:", error);
-
     if (retryCount < maxRetries) {
       console.log(`Reconnecting in ${Math.pow(2, retryCount) * 1000}ms`);
       setTimeout(
         () => {
           mqttClient.end();
+          mqttClient = mqtt.connect(MQTT_URL);
           init(topic, onMessage);
         },
         Math.pow(2, retryCount) * 1000
       );
-      retryCount++;
+      retryCount = retryCount + 1;
     } else {
-      console.error("Max retries reached. Giving up.");
+      process.exit(1);
     }
   });
 

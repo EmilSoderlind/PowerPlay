@@ -9,7 +9,7 @@ export const main = async () => {
     throw new Error("MQTT_TOPIC is not defined");
   }
 
-  await database.connect();
+  database.connect();
 
   mqttReader.init(MQTT_TOPIC, (event) => {
     database.insertMqttEvent(event);
