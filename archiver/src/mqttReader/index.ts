@@ -2,9 +2,15 @@ import mqtt from "mqtt";
 import eventCompresser from "./decompresser";
 import { MqttEvent } from "../types";
 
-const MQTT_URL = "mqtt://test.mosquitto.org:1883";
+const options: mqtt.IClientOptions = {
+  host: "test.mosquitto.org",
+  port: 1883,
+  clientId: "PowerPlay-archiver",
+  protocol: "tcp",
+};
+
 let retryCount = 0;
-let mqttClient = mqtt.connect(MQTT_URL);
+let mqttClient = mqtt.connect(options);
 
 const init = (topic: string, onMessage: (event: MqttEvent) => void) => {
   const maxRetries = 5;
@@ -27,7 +33,7 @@ const init = (topic: string, onMessage: (event: MqttEvent) => void) => {
       setTimeout(
         () => {
           mqttClient.end();
-          mqttClient = mqtt.connect(MQTT_URL);
+          mqttClient = mqtt.connect(options);
           init(topic, onMessage);
         },
         Math.pow(2, retryCount) * 1000
@@ -38,9 +44,9 @@ const init = (topic: string, onMessage: (event: MqttEvent) => void) => {
     }
   });
 
-  mqttClient.on("message", (event, message) => {
+  mqttClient.on("message", (_, rawMessage) => {
     try {
-      const event = eventCompresser.decompress(message.toString());
+      const event = eventCompresser.decompress(rawMessage.toString());
       onMessage(event);
     } catch (error) {
       console.error("Failed to decompress message:", error);
