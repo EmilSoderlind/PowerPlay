@@ -13,7 +13,24 @@ const chairIds = Array.from(
   () => uuidv4().split("-")[0]
 );
 
-const publishEvent = (topic: string, index: number) => {
+const getLog = (type: EventType) => {
+  switch (type) {
+    case "ERROR":
+      return "Horrible null pointer exception BIP BOP";
+    case "ACTIVE":
+      return "Chair's actuators are active";
+    case "INACTIVE":
+      return "Chair's actuators became inactive";
+    case "RECLINE":
+      return "Chair is reclining";
+    case "CHARGING":
+      return "Chair is charging";
+    default:
+      return undefined;
+  }
+};
+
+const publishEvent = async (topic: string, index: number) => {
   const type = EVENT_TYPES[Math.floor(Math.random() * EVENT_TYPES.length)];
   const chairId = chairIds[Math.floor(Math.random() * chairIds.length)];
 
@@ -22,21 +39,21 @@ const publishEvent = (topic: string, index: number) => {
     id: index,
     chairId,
     timestamp: new Date().toISOString(),
-    log:
-      type === "ERROR" ? "Horrible null pointer exception BIP BOP" : undefined,
+    log: getLog(type),
     version: "0.0.1",
   };
 
-  mqttPublisher.publish(topic, event);
+  await mqttPublisher.publish(topic, event);
 };
 
 const start = async (topic: string) => {
   console.log("Pusher starting!");
   let index = 0;
 
-  const publishWithRandomInterval = () => {
-    publishEvent(topic, index++);
-    const randomInterval = Math.random() * 10000;
+  const publishWithRandomInterval = async () => {
+    await publishEvent(topic, index++);
+    const randomInterval = Math.random() * 5000;
+
     setTimeout(publishWithRandomInterval, randomInterval);
   };
 
