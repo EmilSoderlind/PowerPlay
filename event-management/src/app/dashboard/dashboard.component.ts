@@ -88,11 +88,11 @@ export class DashboardComponent {
 
       return [
         { title: 'Total', cols: 1, rows: 1, value: events.length },
-        { title: 'Types', cols: 2, rows: 1, values: counts },
+        { title: 'Types', cols: 1, rows: 2, values: counts },
         {
           title: 'Latest event',
           cols: 3,
-          rows: 1,
+          rows: 2,
           latestEvents: events.splice(0, 5),
         },
       ];
