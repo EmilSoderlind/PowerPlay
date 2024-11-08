@@ -11,9 +11,7 @@ export const main = async () => {
 
   database.connect();
 
-  mqttReader.init(MQTT_TOPIC, (event) => {
-    database.insertMqttEvent(event);
-  });
+  mqttReader.init(MQTT_TOPIC, (event) => database.insertMqttEvent(event));
 };
 
 main();
