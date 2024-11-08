@@ -1,38 +1,37 @@
 <div class="grid-container">
   <h1 class="mat-h1">Event Management</h1>
-  <mat-grid-list cols="3" rowHeight="400px">
+  <mat-grid-list cols="3" rowHeight="250px">
     @for (card of cards | async; track card) {
     <mat-grid-tile [colspan]="card.cols" [rowspan]="card.rows">
       <mat-card class="dashboard-card">
         <mat-card-header>
-          <mat-card-title>
+          <h2>
             {{ card.title }}
-            <hr />
-          </mat-card-title>
+          </h2>
         </mat-card-header>
         <mat-card-content class="dashboard-card-content">
           <ng-container *ngIf="card.title === 'Total'">
-            <h2>
+            <h3>
               <b>{{ card.value }}</b>
-            </h2>
+            </h3>
           </ng-container>
 
           <ng-container *ngIf="card.title === 'Types'">
-            <h5>
+            <h3>
               ACTIVE: <b>{{ card.values?.['ACTIVE'] ?? 0 }}</b>
-            </h5>
-            <h5>
+            </h3>
+            <h3>
               RECLINE: <b>{{ card.values?.['RECLINE'] ?? 0 }}</b>
-            </h5>
-            <h5>
+            </h3>
+            <h3>
               CHARGING: <b>{{ card.values?.['CHARGING'] ?? 0 }}</b>
-            </h5>
-            <h5>
+            </h3>
+            <h3>
               INACTIVE: <b>{{ card.values?.['INACTIVE'] ?? 0 }}</b>
-            </h5>
-            <h5>
+            </h3>
+            <h3>
               ERROR: <b>{{ card.values?.['ERROR'] ?? 0 }}</b>
-            </h5>
+            </h3>
           </ng-container>
 
           <ng-container *ngIf="card.title === 'Latest event'">
