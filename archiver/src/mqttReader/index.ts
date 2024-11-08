@@ -7,6 +7,7 @@ const options: mqtt.IClientOptions = {
   port: 1883,
   clientId: "PowerPlay-archiver",
   protocol: "tcp",
+  keepalive: 0,
 };
 
 let retryCount = 0;

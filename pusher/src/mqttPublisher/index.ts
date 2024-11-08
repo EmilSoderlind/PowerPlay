@@ -6,8 +6,8 @@ const options: mqtt.IClientOptions = {
   host: "test.mosquitto.org",
   port: 1883,
   clientId: "PowerPlay-pusher",
-  clean: true,
   protocol: "tcp",
+  keepalive: 0,
 };
 
 const mqttClient = mqtt.connect(options);
